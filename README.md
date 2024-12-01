@@ -9,8 +9,18 @@ This is a boilerplate for [Advent of Code](https://adventofcode.com/) in [Rust](
 ```rust
 // ./src/solutions/day01.rs
 
+use crate::day::Solution;
+
+pub struct Day01 { }
+
+impl Day01 {
+    fn new (input: 'static str) -> Self {
+        todo!()
+    }
+}
+
 // add implementations for printing the solutions to stdout
-impl Solution<u64, u64> for BoatRace {
+impl Solution<u64, u64> for Day01 {
     fn part_one(&mut self) -> u64 {
         todo!()
     }
