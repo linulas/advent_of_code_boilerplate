@@ -2,6 +2,7 @@
 name = "advent_of_code_boilerplate"
 version = "0.1.0"
 edition = "2021"
+default-run = "advent_of_code_boilerplate"
 
 [dependencies]
 dotenv = "0.15.0"
