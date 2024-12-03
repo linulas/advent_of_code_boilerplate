@@ -2,6 +2,22 @@
 
 This is a boilerplate for [Advent of Code](https://adventofcode.com/) in [Rust](https://www.rust-lang.org/).
 
+## Getting started
+
+Get the boilerplate using [cargo generate](https://github.com/cargo-generate/cargo-generate):
+
+```bash
+# If you don't already have it, install cargo-generate
+cargo install cargo-generate
+
+# Generate the boilerplate
+cargo generate --git https://github.com/linulas/advent_of_code_boilerplate
+
+# Or optionally, just clone the repo (but if you want to use git,
+# you'll need to delete the .git folder and initialize a new repo)
+git clone https://github.com/linulas/advent_of_code_boilerplate
+```
+
 ## Puzzle setup
 
 1. Create a .env file and add:
