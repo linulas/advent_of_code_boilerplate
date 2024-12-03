@@ -4,6 +4,70 @@ This is a boilerplate for [Advent of Code](https://adventofcode.com/) in [Rust](
 
 ## Puzzle setup
 
+1. Create a .env file and add:
+
+```bash
+# .env
+
+# Get session cookie from the developer tools when visiting https://adventofcode.com
+SESSION=your_session_cookie
+YEAR=2024
+```
+
+2. Run the cli to import a specific day by running:
+
+```shell
+cargo run --bin aoc
+```
+
+3. Add the solution to `./src/main.rs`:
+
+```rust
+// ./src/main.rust
+
+use self::solutions::day01::Day01; // import the solution
+use crate::day::print_day;
+use std::env;
+
+#[cfg(test)]
+mod test;
+
+mod day;
+mod solutions;
+
+const ARGUMENT_ERROR: &str = "Please provide a day (number 1-24).";
+fn main() {
+    let args: Vec<String> = env::args().collect();
+
+    if args.len() < 2 {
+        println!("{ARGUMENT_ERROR}");
+        return;
+    }
+
+    let number = match args[1].parse::<u8>() {
+        Ok(num) => {
+            if !(1..=25).contains(&num) {
+                println!("{ARGUMENT_ERROR}");
+                return;
+            }
+            num
+        }
+        Err(_) => {
+            println!("{ARGUMENT_ERROR}");
+            return;
+        }
+    };
+
+    match number {
+        1 => print_day(1, Day01::new(include_str!("./input/01.txt"))), // add the input
+        _ => todo!(),
+    }
+}
+```
+
+### Manual setup (optional)
+If you don't want to use the cli, you can manually setup the project as follows:
+
 1. Create a rust file in `./src/solutions` (can be any name, e.g. `day01.rs`) and add it to `./src/solutions/mod.rs`:
 
 ```rust
@@ -92,7 +156,7 @@ fn main() {
 ## Testing
 
 ```bash
-cargo test -- --nocapture --test test_day_one
+cargo test -- --nocapture --test day_one
 ```
 
 ## Running against the real input

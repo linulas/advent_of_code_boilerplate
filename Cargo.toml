@@ -4,3 +4,11 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+dotenv = "0.15.0"
+inquire = "0.7.5"
+reqwest = "0.12.9"
+tokio = { version = "1.41.1", features = ["full"] }
+tokio-macros = "1.8.2"
+
+[[bin]]
+name = "aoc"
