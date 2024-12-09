@@ -2,6 +2,7 @@ use dotenv::dotenv;
 use inquire::{required, Text};
 use reqwest::{header::COOKIE, Client};
 use std::error::Error;
+use std::fs::File;
 use std::io::{Read, Write};
 
 #[tokio::main]
@@ -38,26 +39,48 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
     // create files
     let module_path = format!("src/solutions/{module_name}.rs");
-    let mut solution_file =
-        std::fs::File::create(module_path).expect("Solutions file path must be valid");
+    let mut solution_file = File::create(module_path).expect("Solutions file path must be valid");
     let imports = "use crate::day::Solution;";
     let define_struct = format!("pub struct {struct_name} {{}}");
     let impl_struct =
         format!("impl {struct_name} {{ pub fn new(input: &'static str) -> Self {{ Self {{}} }} }}");
     let impl_solution = format!("impl Solution<i32, i32> for {struct_name} {{ fn part_one(&mut self) -> i32 {{ 0 }} fn part_two(&mut self) -> i32 {{ 0 }} }}");
     solution_file
-        .write_all(format!("{imports}\n\n{define_struct}\n\n{impl_struct}\n\n{impl_solution}").as_bytes())
+        .write_all(
+            format!("{imports}\n\n{define_struct}\n\n{impl_struct}\n\n{impl_solution}").as_bytes(),
+        )
         .expect("Failed to write solutions file");
 
     // append module to solutions mod file
     let mod_path = "src/solutions/mod.rs";
-    let mut mod_file = std::fs::File::open(mod_path).expect("Mod file path must be valid");
+    let mut mod_file = File::open(mod_path).expect("Mod file path must be valid");
     let mut mod_contents = String::new();
     mod_file
         .read_to_string(&mut mod_contents)
         .expect("Failed to read mod file");
     let mod_contents = format!("pub mod {module_name};\n{}", mod_contents);
+
     std::fs::write(mod_path, mod_contents).expect("Failed to write mod file");
+
+    let input_day = if day.len() == 1 {
+        format!("0{day}")
+    } else {
+        day.clone()
+    };
+
+    let mut main_file = File::open("src/main.rs").expect("Main file path must be valid");
+    let mut main_contents = String::new();
+    main_file
+        .read_to_string(&mut main_contents)
+        .expect("Failed to read main.rs file");
+    let main_contents = format!("use solutions::{module_name}::{struct_name};\n{}", main_contents);
+    let main_contents = main_contents.replace(
+        &format!(" {day} => todo!()"),
+        format!(" {day} => print_day({day}, {struct_name}::new(include_str!(\"input/{input_day}.txt\")))")
+            .as_str(),
+    );
+
+    std::fs::write("src/main.rs", main_contents).expect("Failed to write mod file");
 
     let client = Client::new();
 
@@ -70,14 +93,9 @@ async fn main() -> Result<(), Box<dyn Error>> {
         .await?;
 
     if response.status().is_success() {
-        if day.len() == 1 {
-            day = format!("0{day}")
-        }
-
         let body = response.text().await?;
-        let input_path = format!("src/input/{day}.txt");
-        let mut input_file =
-            std::fs::File::create(input_path).expect("Input file path must be valid");
+        let input_path = format!("src/input/{input_day}.txt");
+        let mut input_file = File::create(input_path).expect("Input file path must be valid");
         input_file
             .write_all(format!("{}\n", body.trim()).as_bytes())
             .expect("Failed to write input file");
