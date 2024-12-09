@@ -110,8 +110,8 @@ async fn main() -> Result<(), Box<dyn Error>> {
         test_contents
     );
     test_contents = test_contents.replace(
-        &format!("fn day_{input_day}() {{ todo!(); }}"),
-        format!("fn day_{input_day}() {{ let mut solution = {struct_name}::new(include_str!(\"input/{input_day}_test.txt\")); assert_eq!(solution.part_one(), 0); assert_eq!(solution.part_two(), 0); }}")
+        &format!("todo!(); // day {day}"),
+        format!("let mut solution = {struct_name}::new(include_str!(\"input/{input_day}_test.txt\")); assert_eq!(solution.part_one(), 0); assert_eq!(solution.part_two(), 0);")
             .as_str(),
     );
 
