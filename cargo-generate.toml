@@ -1,2 +1,2 @@
 [template]
-include = ["src/bin/aoc/main.rs"]
+exclude = ["src/bin/aoc/main.rs"]
