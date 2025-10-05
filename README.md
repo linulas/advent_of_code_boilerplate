@@ -30,7 +30,9 @@ SESSION=your_session_cookie
 YEAR=2024
 ```
 
-2. Run the cli to import a specific day by running:
+2. Create folder ./src/input/
+
+3. Run the cli to import a specific day:
 
 ```shell
 cargo run --bin aoc
