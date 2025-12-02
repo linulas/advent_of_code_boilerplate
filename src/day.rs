@@ -1,6 +1,4 @@
 use std::fmt::Display;
-use std::fs::File;
-use std::io::{BufRead, BufReader};
 
 pub trait Solution<T: Display, F: Display> {
     fn part_one(&mut self) -> T;
